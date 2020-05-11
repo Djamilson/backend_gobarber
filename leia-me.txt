@@ -1,0 +1,7 @@
+para debug
+no arquivo nodemon.json
+{
+  "execMap": {
+    "js":"node --inspect -r sucrase/register"
+  }
+}
