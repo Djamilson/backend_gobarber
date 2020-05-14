@@ -10,7 +10,7 @@ class AppointmentFinallyController {
     const { appointmentId } = req.params;
     const { status, idDevice } = req.query;
     const connectedUsers = req.connectedUsers;
-    
+
     const appointmentSelect = await UpdateAppointmentProviderService.run({
       appointmentId,
       status,

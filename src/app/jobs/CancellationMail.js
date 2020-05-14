@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
-import Mail from '../../lib/Mail';
+import Mail from '../../lib/MailCancellation';
 import mailConfigSESAWS from '../../config/sesAWS';
 
 class CancellationMail {

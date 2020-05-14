@@ -2,15 +2,16 @@ import { parseISO, startOfDay, addHours, format } from 'date-fns';
 
 import User from '../models/User';
 import Appointment from '../models/Appointment';
-import SortListAppointment from './SortListAppointment';
 
-const { Op } = require('sequelize');
 import Cache from '../../lib/Cache';
 
 import File from '../models/File';
 
+const { Op } = require('sequelize');
+
 class IndexAppointmentPorUserService {
-  async run({ page, pageSize, querywhere }) {
+  async run({ page, user_id }) {
+
     const newDate = new Date();
     const data_ = new Date(
       newDate.valueOf() + newDate.getTimezoneOffset() * 60000
@@ -22,38 +23,19 @@ class IndexAppointmentPorUserService {
     // const timeZoneLocal = offsett / 60;
     const startOfDayy = addHours(startOfDay(parsedDate), 3);
 
-    const ret = await Appointment.findAndCountAll({
-      where: {
-        ...querywhere,
-        canceled_at: null,
-        [Op.or]: [{ status: 'ATENDENDO' }, { status: 'AGUARDANDO' }],
-        date: {
-          [Op.gte]: startOfDayy,
-        },
-      },
-    });
-
-    console.log('Total:', ret.count);
-    const pages = Math.ceil(ret.count / pageSize);
-
-    const appointmentInfo = { page, pages, total: ret.count, limit: pageSize };
-
     const appointments = await Appointment.findAll({
-
-     where: {
-        ...querywhere,
+      where: {
+        user_id,
         canceled_at: null,
         [Op.or]: [{ status: 'ATENDENDO' }, { status: 'AGUARDANDO' }],
         date: {
           [Op.gte]: startOfDayy,
         },
       },
-
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
       order: ['date'],
       attributes: ['id', 'date', 'past', 'cancelable', 'status', 'agendar'],
-
+      limit: 20,
+      offset: (page - 1) * 20,
       include: [
         {
           model: User,
@@ -70,7 +52,7 @@ class IndexAppointmentPorUserService {
       ],
     });
 
-    return { appointments, appointmentInfo };
+    return appointments;
   }
 
   async appointmentComUser({ page, user_id }) {
