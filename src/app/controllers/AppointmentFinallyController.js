@@ -10,12 +10,14 @@ class AppointmentFinallyController {
     const { appointmentId } = req.params;
     const { status, idDevice } = req.query;
     const connectedUsers = req.connectedUsers;
+    console.log('Vai entrar: :::', appointmentId, status, idDevice)
+    console.log('Vai entrar: connectedUsers ', connectedUsers)
 
     const appointmentSelect = await UpdateAppointmentProviderService.run({
       appointmentId,
       status,
     });
-
+    console.log('appointmentSelect::::', appointmentSelect);
     const { id, user_id, provider_id } = appointmentSelect;
 
     const appointments = await IndexAppointmentService.run({
@@ -44,7 +46,10 @@ class AppointmentFinallyController {
 
     //caso o usuario esteja na fila recebe a message tratada
 
-    if (status === enumAppointment.finalizado || status === enumAppointment.cancelado) {
+    if (
+      status === enumAppointment.finalizado ||
+      status === enumAppointment.cancelado
+    ) {
       const page = 1;
       const appointmentsdodia = await IndexAppointmentService.run({
         page,
@@ -60,7 +65,7 @@ class AppointmentFinallyController {
         return { id: String(key), ind: uniq[key] };
       });
 
-      const arrayViewFila = [{value: 'fila'}]
+      const arrayViewFila = [{ value: 'fila' }];
 
       result.forEach(async element => {
         const listAppointments = await IndexAppointmentFilaService.run({

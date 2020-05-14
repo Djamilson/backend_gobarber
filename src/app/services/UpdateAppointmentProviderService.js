@@ -6,6 +6,11 @@ import Cache from '../../lib/Cache';
 
 class UpdateAppointmentProviderService {
   async run({ appointmentId, status }) {
+    console.log(
+      '==>>>>>>>>>>>>::: meu id UpdateAppointmentProviderService :',
+      appointmentId,
+      status
+    );
     const appointmentOld = await Appointment.findByPk(appointmentId, {
       include: [
         {
@@ -19,6 +24,21 @@ class UpdateAppointmentProviderService {
       throw new Error('Appointment not exists.');
     }
 
+    //é obrigatório invalidar a cache aqui, porqu senão caso
+    //entre no if a cache não é invalidada
+
+    console.log('==>>>>>>>>>>>>::: meu id :', appointmentOld.user_id);
+    /**
+     * Invalidate cache
+     */
+    /** invalida o cache do usuário */
+    await Cache.invalidatePrefix(`user:${appointmentOld.user_id}:appointments`);
+
+    /** invalida o cache do provider*/
+    await Cache.invalidatePrefix(
+      `user:${appointmentOld.provider_id}:appointments`
+    );
+
     if (status === enumAppointment.cancelado) {
       const appointment = await appointmentOld.update({
         status,
@@ -29,17 +49,6 @@ class UpdateAppointmentProviderService {
     }
 
     const appointment = await appointmentOld.update({ status });
-
-    /**
-     * Invalidate cache
-     */
-    /** invalida o cache do usuário */
-    await Cache.invalidatePrefix(`user:${appointment.user_id}:appointments`);
-
-    /** invalida o cache do provider*/
-    await Cache.invalidatePrefix(
-      `user:${appointment.provider_id}:appointments`
-    );
 
     return appointment;
   }
