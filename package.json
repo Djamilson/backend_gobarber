@@ -2,7 +2,7 @@
   "name": "backend_gobarber_nodejs",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/Djamilson/backend_gobarber_nodejs.git",
+  "repository": "https://github.com/Djamilson/backend_gobarber.git",
   "author": "Djamilson <djamilson@gmail.com>",
   "license": "MIT",
   "scripts": {
