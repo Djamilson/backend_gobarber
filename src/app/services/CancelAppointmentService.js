@@ -27,19 +27,19 @@ class CancelAppointmentService {
 
     appointment.canceled_at = new Date();
     appointment.status = enumAppointment.cancelado;
-
+console.log('======', appointment_id, user_id)
     await appointment.save();
-
+    console.log('====== 2', appointment_id, user_id)
     await Queue.add(CancellationMail.key, { appointment });
-
+    console.log('======3', appointment_id, user_id)
     /**
      * Invalidate cache
      */
     /** invalida o cache do usuário */
-    await Cache.invalidatePrefix(`user:${user_id}:appointments`);
+    await Cache.invalidatePrefix(`user:${appointment.user_id}:appointments`);
     /** invalida o cache do provider*/
     await Cache.invalidatePrefix(`user:${appointment.provider_id}:appointments`);
-
+    console.log('======6666: ')
     return appointment;
   }
 }

@@ -8,24 +8,15 @@ import IndexAppointmentPorProviderService from '../services/IndexAppointmentPorP
 import IndexAppointmentPorUserService from '../services/IndexAppointmentPorUserService';
 import IndexAppointmentService from '../services/IndexAppointmentService';
 
-const { Op } = require('sequelize');
-
 import WebSocket from '../../websocket';
 
 class AppointmentController {
   async index(req, res) {
-    const { page, limit } = req.query;
-    const pageSize = limit;
-
-    const querywhere = {
-      user_id: req.userId,
-      canceled_at: null,
-    };
+    const { page } = req.query;
 
     const appointments = await IndexAppointmentPorUserService.run({
       page,
-      pageSize,
-      querywhere,
+      user_id: req.userId,
     });
 
     return res.json(appointments);
@@ -42,6 +33,7 @@ class AppointmentController {
     const date__ = format(data_, "yyyy-MM-dd'T'HH:mm:ssxxx");
 
     if (agendar) {
+
       await CreateAppointmentService.run({
         provider_id,
         user_id: req.userId,
@@ -100,13 +92,14 @@ class AppointmentController {
       appointment_id: id,
       user_id: userId,
     });
-
+console.log('Appointment::::')
     const date = format(new Date(), "yyyy-MM-dd'T'HH:mm:ssxxx");
     const parsedDate = parseISO(date);
     const endOfDayy = addHours(endOfDay(parsedDate), 3);
     const { provider_id } = appointment;
 
     if (appointment.date < new Date(endOfDayy)) {
+
       const appointments = await IndexAppointmentPorProviderService.run({
         provider_id,
       });
@@ -116,8 +109,8 @@ class AppointmentController {
         const arrayView = [{ value: 'fila' }];
         const listAppointments = await IndexAppointmentFilaService.run({
           page,
-          provider_id: idProvider,
-          userId: idUser,
+          provider_id,
+          userId,
         });
 
         WebSocket.socketMessage(

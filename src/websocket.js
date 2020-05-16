@@ -73,7 +73,7 @@ class WebSocket {
     }
   }
 
-  //function é chamanda no AppointmentController no store, craição
+  //function é chamanda no AppointmentController no store, criação
   //function é chamanda no AppointmentFinallyController
   //chamada quand vai fazer a finalização do atendimento
 
@@ -102,7 +102,7 @@ class WebSocket {
       arrayView,
       connectedUsers
     );
-   
+
     this.sendMessage(sendSocketMessageTo, messageSend, data);
   }
 
