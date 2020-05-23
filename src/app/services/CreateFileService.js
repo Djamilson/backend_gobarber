@@ -6,6 +6,7 @@ import { basename, extname } from 'path';
 
 class CreateFileService {
   async run({ name, path, key, destination, location, filePath }) {
+    console.log('2 req.file:::::::', name, path, key, destination, location, filePath);
 
     let newPath = '';
 
@@ -18,13 +19,16 @@ class CreateFileService {
       fs.unlinkSync(filePath);
       newPath = key;
     } else {
-
-      newPath = `${basename(location, extname(location))}.jpg`;
+      console.log('Finalll 4 location:::::::', location);
+      const newPath = (key.replace('uploads/', '')).replace('-original', '');
     }
+
+    console.log('name:::::::', name);
+    console.log('Finalll 4 req.file:::::::', newPath);
 
     const { id: _id, name: _name, path: _path, url } = await File.create({
       name,
-      path: newPath,
+      path: key,
     });
 
     return { _id, _name, _path, url };

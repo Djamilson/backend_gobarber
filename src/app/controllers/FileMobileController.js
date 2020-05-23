@@ -6,8 +6,6 @@ import Group from '../models/Group';
 import GroupUser from '../models/GroupUser';
 import User from '../models/User';
 
-import { basename, extname } from 'path';
-import slug from '../util/slug';
 import CreateFileService from '../services/CreateFileService';
 import UpdateFileService from '../services/UpdateFileService';
 import SearchUserService from '../services/SearchUserService';
@@ -15,27 +13,30 @@ import SearchUserService from '../services/SearchUserService';
 class FileMobileController {
   async store(req, res) {
     const { userId } = req;
+    const { originalname: name } = req.file;
     const {
-      originalname: name,
       filename: path,
       key,
       destination,
-      location,
+      Location: location,
       path: filePath,
-    } = req.file;
+    } = req.file.original;
 
+    console.log('File:::: ', req.file);
+
+    const newPath = key.replace('uploads/', '').trim();
     const file = await CreateFileService.run({
       name,
-      path,
+      path: newPath,
       key,
       destination,
       location,
       filePath,
     });
 
+    console.log('Chegou');
     const userExist = await User.findByPk(userId);
     await userExist.update({ userExist, avatar_id: file._id });
-
     const user = await SearchUserService.run({ userId });
 
     return res.json(user);
@@ -110,9 +111,7 @@ class FileMobileController {
   }
 
   async update(req, res) {
-console.log()
-
-
+    console.log();
 
     const { id } = req.params;
     const { userId } = req;
