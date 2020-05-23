@@ -34,7 +34,7 @@ class File extends Model {
             if (process.env.LOCAL_DOS_ARQUIVOS == 'local') {
               return `${process.env.URL_LOCAL}/files/${this.path}`;
             }
-            return `${process.env.URL_S3}/compressed/${this.path}`;
+            return `${process.env.URL_S3}/uploads/${this.path}`;
           },
         },
       },
