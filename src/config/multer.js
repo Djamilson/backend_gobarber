@@ -2,7 +2,6 @@ const path = require('path');
 const crypto = require('crypto');
 const multer = require('multer');
 
-import sharp from 'sharp';
 import aws from 'aws-sdk';
 import multerS3 from 'multer-sharp-s3';
 import slug from '../app/util/slug';
@@ -37,30 +36,22 @@ const storageTypes = {
         const { originalname } = file;
         const baseName = slug(basename(originalname, extname(originalname)));
         const extensao = originalname.split('.').pop();
-/*
-        const fileName = `uploads/${hash.toString(
-          'hex'
-        )}_${baseName}.${extensao}`;*/
 
-        const fileName = `uploads/${hash.toString(
-          'hex'
-        )}_${baseName}`;
-
+        const fileName = `uploads/${hash.toString('hex')}_${baseName}`;
 
         cb(null, fileName);
       });
     },
-
-    multiple: true,
-    rotate: 90,
     resize: [
-      { suffix: 'xlg', width: 1200, height: 1200 },
-      { suffix: 'lg', width: 800, height: 800 },
-      { suffix: 'md', width: 500, height: 500 },
-      { suffix: 'sm', width: 300, height: 300 },
+      { suffix: 'xlg', width: 1200 },
+      { suffix: 'lg', width: 800},
+      { suffix: 'md', width: 500},
+      { suffix: 'sm', width: 300},
       { suffix: 'xs', width: 100 },
       { suffix: 'original' },
     ],
+    multiple: true,
+    rotate: 90,
     normalize: true,
     toFormat: {
       type: 'jpeg',
