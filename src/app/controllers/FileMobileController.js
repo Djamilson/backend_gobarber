@@ -11,7 +11,10 @@ import UpdateFileService from '../services/UpdateFileService';
 import SearchUserService from '../services/SearchUserService';
 
 function removeDir(nameFile) {
-  return nameFile.replace('uploads/', '').trim();
+  return nameFile
+    .replace('uploads/', '')
+    .replace('-original', '')
+    .trim();
 }
 
 class FileMobileController {
@@ -59,7 +62,7 @@ class FileMobileController {
       path: filePath,
     } = req.file.original;
 
-    const newPath = key.replace('uploads/', '').trim();
+    const newPath = removeDir(key);
 
     const file = await UpdateFileService.run({
       id_file: id,
