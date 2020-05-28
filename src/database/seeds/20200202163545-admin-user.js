@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           name: 'Djamilson Alves da Costa',
-          email: 'djamilson@gmail.com',
+          email: 'admin@gobarber.com',
           password_hash: bcrypt.hashSync('@123456', 8),
           provider: true,
           is_verified: true,
