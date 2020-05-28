@@ -167,8 +167,8 @@ routes.post('/finances', upload.single('file'), FinanceController.store);
 routes.put('/finances', FinanceController.store);
 routes.delete('/finances/:id', FinanceController.delete);
 
-routes.post('/files', upload.single('file'), FileMobileController.store);
-routes.put('/files', upload.single('file'), FileMobileController.update);
+routes.post('/files', upload.single('file'), FileController.store);
+routes.put('/files', upload.single('file'), FileController.update);
 
 //atualiza foto do perfil no mobil
 routes.post('/files/mobile', upload.single('file'), FileMobileController.store);
