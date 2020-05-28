@@ -6,22 +6,31 @@ import { basename, extname } from 'path';
 import slug from '../util/slug';
 import CreateFileService from '../services/CreateFileService';
 
+function removeDir(nameFile) {
+  return nameFile
+    .replace('uploads/', '')
+    .replace('-original', '')
+    .trim();
+}
+
 class FileController {
   async store(req, res) {
-    console.log('req.file:::', req.file);
+    const { userId } = req;
+    const { originalname: name } = req.file;
     const {
-      originalname: name,
       filename: path,
       key,
       destination,
-      location,
+      Location: location,
       path: filePath,
-    } = req.file;
+    } = req.file.original;
+
+    const newKey = removeDir(key);
 
     const file = await CreateFileService.run({
       name,
       path,
-      key,
+      key: newKey,
       destination,
       location,
       filePath,
