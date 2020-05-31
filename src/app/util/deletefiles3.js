@@ -6,8 +6,7 @@ export default async function s3DeleteObject(bucket, file) {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: process.env.AWS_DEFAULT_REGION,
   });
-  console.log('S3 DELETE: ', file);
-
+ 
   const listParams = {
     Bucket: bucket,
     Prefix: 'uploads/' + file,
@@ -23,11 +22,8 @@ export default async function s3DeleteObject(bucket, file) {
   };
 
   listedObjects.Contents.forEach(({ Key }) => {
-    console.log('Passsei aqui::', Key);
     deleteParams.Delete.Objects.push({ Key });
   });
-
-  console.log(':::deleteParamss', deleteParams);
 
   await s3.deleteObjects(deleteParams).promise();
 

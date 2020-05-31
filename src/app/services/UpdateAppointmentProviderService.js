@@ -6,11 +6,7 @@ import Cache from '../../lib/Cache';
 
 class UpdateAppointmentProviderService {
   async run({ appointmentId, status }) {
-    console.log(
-      '==>>>>>>>>>>>>::: meu id UpdateAppointmentProviderService :',
-      appointmentId,
-      status
-    );
+
     const appointmentOld = await Appointment.findByPk(appointmentId, {
       include: [
         {
@@ -27,8 +23,7 @@ class UpdateAppointmentProviderService {
     //é obrigatório invalidar a cache aqui, porqu senão caso
     //entre no if a cache não é invalidada
 
-    console.log('==>>>>>>>>>>>>::: meu id :', appointmentOld.user_id);
-    /**
+     /**
      * Invalidate cache
      */
     /** invalida o cache do usuário */

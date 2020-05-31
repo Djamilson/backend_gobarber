@@ -20,7 +20,7 @@ class WebSocket {
       const mont = { idUser, socketID, value: view, idDevice };
       const cachekeyIO = `conect:${idUser}:${idDevice}`;
 
-      //se existir chave invaida
+      //se existir chave invalida
       await Cache.invalidate(cachekeyIO);
       // salva o dados no redis
       await Cache.set(cachekeyIO, mont);

@@ -92,7 +92,7 @@ class AppointmentController {
       appointment_id: id,
       user_id: userId,
     });
-console.log('Appointment::::')
+
     const date = format(new Date(), "yyyy-MM-dd'T'HH:mm:ssxxx");
     const parsedDate = parseISO(date);
     const endOfDayy = addHours(endOfDay(parsedDate), 3);

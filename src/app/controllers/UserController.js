@@ -124,6 +124,7 @@ class UserController {
     await userSearch.update(req.body);
 
     const user = await SearchUserService.run({ userId });
+    
     return res.json(user);
   }
 }

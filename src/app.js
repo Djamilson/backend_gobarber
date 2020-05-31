@@ -41,7 +41,12 @@ class App {
     this.appExpress.use(Sentry.Handlers.requestHandler());
     // this.appExpress.use(cors({ origin: false }));
     if (process.env.NODE_ENV === 'development') {
-      this.appExpress.use(cors());
+      this.appExpress.use(
+        cors({
+          origin: 'http://localhost:3000',
+          credentials: true,
+        })
+      );
     } else {
       //   this.appExpress.use(helmet());
       this.appExpress.use(
