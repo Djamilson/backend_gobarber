@@ -1,21 +1,10 @@
-import sharp from 'sharp';
-import pathlocal from 'path';
-import fs from 'fs';
-import File from '../models/File';
-import Group from '../models/Group';
-import GroupUser from '../models/GroupUser';
 import User from '../models/User';
 
 import CreateFileService from '../services/CreateFileService';
 import UpdateFileService from '../services/UpdateFileService';
 import SearchUserService from '../services/SearchUserService';
 
-function removeDir(nameFile) {
-  return nameFile
-    .replace('uploads/', '')
-    .replace('-original', '')
-    .trim();
-}
+import removerNameDiretorio from '../util/removerNameDiretorio';
 
 class FileMobileController {
   async store(req, res) {
@@ -29,7 +18,7 @@ class FileMobileController {
       path: filePath,
     } = req.file.original;
 
-    const newKey = removeDir(key);
+    const newKey = removerNameDiretorio(key);
 
     const file = await CreateFileService.run({
       name,
@@ -48,7 +37,6 @@ class FileMobileController {
   }
 
   async update(req, res) {
-    console.log();
 
     const { id } = req.params;
     const { userId } = req;
@@ -62,7 +50,7 @@ class FileMobileController {
       path: filePath,
     } = req.file.original;
 
-    const newPath = removeDir(key);
+    const newPath = removerNameDiretorio(key);;
 
     const file = await UpdateFileService.run({
       id_file: id,

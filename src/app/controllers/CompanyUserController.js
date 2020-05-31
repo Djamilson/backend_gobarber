@@ -17,6 +17,7 @@ class CompanyUserController {
           include: [
             {
               model: Group,
+              as: 'group',
               attributes: ['id', 'name', 'description'],
             },
           ],

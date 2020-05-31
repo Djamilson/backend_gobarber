@@ -7,9 +7,9 @@ import Cache from '../../lib/Cache';
 
 class CadCompanyUserController {
   async index(req, res) {
-    const { cod_company: cod } = req.params;
+    const { idCompany } = req.params;
 
-    const listUser = await Company.findByPk(cod, {
+    const listUser = await Company.findByPk(idCompany, {
       include: [
         {
           model: User,

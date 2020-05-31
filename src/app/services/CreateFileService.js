@@ -20,7 +20,7 @@ class CreateFileService {
       path: key,
     });
 
-    return { _id, _name, _path, url };
+      return { _id, _name, _path, url };
   }
 }
 export default new CreateFileService();

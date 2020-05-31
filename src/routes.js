@@ -86,7 +86,6 @@ routes.put('/forget/new_password', UserMobilController.newPassword);
 routes.get('/mobile/forget_password', TokenController.index);
 routes.post('/forgetpassword/mobile', RecoverPasswordController.store);
 
-
 routes.post(
   '/sessions',
   /* bruteForce.prevent, */
@@ -138,10 +137,15 @@ routes.get('/notifications', NotificationController.index);
 routes.put('/notifications/:id', NotificationController.update);
 
 routes.get('/companies', CompanyController.index);
-routes.get('/companyperfil/:cod_company', CadCompanyUserController.index);
+routes.get('/companyperfil/:idCompany', CadCompanyUserController.index);
 routes.put('/companies', CadCompanyUserController.update);
 routes.get('/empresas', CadCompanyController.index);
-routes.put('/companyfiles', CompanyFileController.update);
+
+routes.put(
+  '/company/update/files/:idCompany',
+  upload.single('file'),
+  CompanyFileController.update
+);
 
 routes.post(
   '/companies',

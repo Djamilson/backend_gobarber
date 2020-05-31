@@ -5,12 +5,11 @@ import Group from '../models/Group';
 
 class GroupController {
   async index(req, res) {
-    const master = 'role_master';
     // trás todos os grupos exeto o master
     const groups = await Group.findAll({
       where: {
         name: {
-          [Op.ne]: master,
+          [Op.ne]: 'role-master',
         },
       },
       attributes: ['id', 'name', 'description'],

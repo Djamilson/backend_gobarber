@@ -1,12 +1,12 @@
 import * as Yup from 'yup';
 
-import sharp from 'sharp';
-import pathlocal from 'path';
-import fs from 'fs';
 import File from '../models/File';
 import User from '../models/User';
+import Company from '../models/Company';
 
 import Finance from '../models/Finance';
+import removerNameDiretorio from '../util/removerNameDiretorio';
+import CreateFileService from '../services/CreateFileService';
 
 class FinanceController {
   async index(req, res) {
@@ -27,23 +27,37 @@ class FinanceController {
   }
 
   async store(req, res) {
-    // const { originalname: name, filename: path } = req.file;
     const { priceFloat: price, company_id, date } = req.body;
 
-    const { originalname: name, filename: path } = req.file;
+    const companyExists = await Company.findByPk(company_id);
 
-    await sharp(req.file.path)
-      .resize(500)
-      .jpeg({ quality: 70 })
-      .toFile(pathlocal.resolve(req.file.destination, 'resized', path));
-    // remove os arquivo da pasta, arquivos velhos
-    fs.unlinkSync(req.file.path);
+    if (!companyExists) {
+      return res.status(400).json({ error: 'Not company exists.' });
+    }
 
-    const file = await File.create({ name, path });
+    const { originalname: name } = req.file;
+    const {
+      filename: path,
+      key,
+      destination,
+      Location: location,
+      path: filePath,
+    } = req.file.original;
+
+    const newPath = removerNameDiretorio(key);
+
+    const file = await CreateFileService.run({
+      name,
+      path,
+      key: newPath,
+      destination,
+      location,
+      filePath,
+    });
 
     await Finance.create({
       price,
-      avatar_id: file.id,
+      avatar_id: file._id,
       company_id,
       date,
     });

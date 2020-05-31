@@ -10,14 +10,12 @@ class AppointmentFinallyController {
     const { appointmentId } = req.params;
     const { status, idDevice } = req.query;
     const connectedUsers = req.connectedUsers;
-    console.log('Vai entrar: :::', appointmentId, status, idDevice)
-    console.log('Vai entrar: connectedUsers ', connectedUsers)
 
     const appointmentSelect = await UpdateAppointmentProviderService.run({
       appointmentId,
       status,
     });
-    console.log('appointmentSelect::::', appointmentSelect);
+
     const { id, user_id, provider_id } = appointmentSelect;
 
     const appointments = await IndexAppointmentService.run({
