@@ -51,7 +51,7 @@ class App {
       //   this.appExpress.use(helmet());
       this.appExpress.use(
         cors({
-          origin: [process.env.FRONT_URL, process.env.FRONT_URL_],
+          origin: process.env.FRONT_URL,
         })
       );
     }

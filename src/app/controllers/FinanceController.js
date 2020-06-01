@@ -7,6 +7,8 @@ import Company from '../models/Company';
 import Finance from '../models/Finance';
 import removerNameDiretorio from '../util/removerNameDiretorio';
 import CreateFileService from '../services/CreateFileService';
+import deletefiles3 from '../util/deletefiles3';
+
 
 class FinanceController {
   async index(req, res) {
@@ -129,7 +131,15 @@ class FinanceController {
   async delete(req, res) {
     const { id } = req.params;
 
-    const financeExist = await Finance.findByPk(id);
+    const financeExist = await Finance.findByPk(id, {
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
+    });
 
     if (!financeExist) {
       return res
@@ -138,6 +148,10 @@ class FinanceController {
     }
 
     await financeExist.destroy({ force: true });
+
+    const { path: newKeyDelete } = financeExist.avatar;
+
+    await deletefiles3(process.env.BUCKET_NAME, newKeyDelete);
 
     return res.status(200).json();
   }
